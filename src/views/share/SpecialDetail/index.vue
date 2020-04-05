@@ -174,9 +174,9 @@ export default {
         this.offset += this.limit
       }
       http.fetchGet(this.URL.getGoods, params).then(res => {
+        this.loading = false
         if (res.code === '0') {
           console.log('goods:', res)
-          this.loading = false
           const arr = res.paipinLiebiao.map(item=>{
             return{
               ...item,

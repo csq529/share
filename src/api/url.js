@@ -5,7 +5,8 @@ const url = {
   getRecommend: `${baseUrl}/goods/similar`,
   getZhuanChangDetail: `${baseUrl}/home/getZhuanChangDetail`,
   getGoods: `${baseUrl}/place/goods`,
-  getGoodsDetail: `http://39.97.231.232:8805/product/findProduct`
+  getGoodsDetail: `http://39.97.231.232:8805/product/findProduct`,
+  guessLike: 'http://39.97.231.232:8805/index/queryAnalogous'
 }
 
 export { url }
