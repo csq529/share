@@ -1,9 +1,9 @@
 <template>
   <a class="goods-wrapper" id="btnOpenApp" @click="downLoad">
-    <a class="download-wrapper">
+    <div class="download-wrapper">
       <img class="download-bg" src="../../../assets/img/download.png" alt="">
       <div class="godownload">去下载</div>
-    </a>
+    </div>
     <div v-if="!showLoading">
       <div class="header">
         <van-swipe class="my-swipe" indicator-color="#000" :autoplay="3000">
@@ -53,7 +53,7 @@
         </div>
       </div>
       <div class="choose-property">
-        <div class="property-title flex-center">
+        <div class="property-title">
           <div class="property">
             <span>选择</span>
             <span>{{ attributes }}</span>
@@ -178,7 +178,7 @@ export default {
       new JMLink({
         jmlink:'https://agr903.jmlk.co/AAX8',// 短链地址
         button:document.querySelector('a#btnOpenApp'),
-        // autoLaunchApp : true,
+        autoLaunchApp : true,
         plhparams: {
           productId: this.$route.query.productId
         }
@@ -385,6 +385,8 @@ export default {
     border-bottom .24rem solid #FCFAFA
     .property-title
         font-size .28rem
+        display flex
+        align-items flex-start
         span:first-child
           color #333333
           font-weight bold
