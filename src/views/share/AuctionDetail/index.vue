@@ -1,5 +1,5 @@
 <template>
-  <div class="auction-wrapper">
+  <a class="auction-wrapper" id="btnOpenApp" @click="downLoad">
     <div class="download-wrapper">
       <img class="download-bg" src="../../../assets/img/download.png" alt="">
       <a id="btnOpenApp" class="godownload">去下载</a>
@@ -218,9 +218,10 @@
         <div class="givemoney" :class="{'givemoneyend' : auctionDetail.row.zcppstatecode === '3' || auctionDetail.row.zcppstatecode === '7'}" v-if="!hasEarnest&&auctionDetail.row.paipinzhuangtai=='1'">缴纳保证金</div>
       </div>
     </div>
+    
 
     <van-loading v-else type="spinner" size="24px" vertical>加载中...</van-loading>
-  </div>
+  </a>
 </template>
 
 <script>
@@ -245,6 +246,17 @@ export default {
     }
   },
   methods: {
+    downLoad() {
+      new JMLink({
+        jmlink:'https://agr903.jmlk.co/AA56',// 短链地址
+        button:document.querySelector('a#btnOpenApp'),
+        autoLaunchApp : true,
+        plhparams: {
+          auctionId: this.$route.query.id || 15751,
+          lotId: this.$route.query.zhuanchangid || 899
+        }
+    });
+    },
     // 商品详情
     getAuctionDetail() {
       let params = {

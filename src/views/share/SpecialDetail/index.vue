@@ -1,5 +1,5 @@
 <template>
-  <div class="special-wrapper">
+  <a class="special-wrapper" id="btnOpenApp" @click="downLoad">
     <div class="download-wrapper">
       <img class="download-bg" src="../../../assets/img/download.png" alt="">
       <div class="godownload">去下载</div>
@@ -117,7 +117,7 @@
       <img class="my-auction" src="../../../assets/img/my-auction.png" alt="">
     </div>
     <van-loading v-else type="spinner" size="24px" vertical>加载中...</van-loading>
-  </div>
+  </a>
 </template>
 
 <script>
@@ -143,6 +143,16 @@ export default {
     }
   },
   methods: {
+    downLoad() {
+      new JMLink({
+        jmlink:'https://agr903.jmlk.co/AA5nxian',// 短链地址
+        button:document.querySelector('a#btnOpenApp'),
+        autoLaunchApp : true,
+        plhparams: {
+          auctionId: this.$route.query.id || 15751,
+        }
+    });
+    },
     showMoreText() {
       this.moreText = !this.moreText
       let dom = this.$refs.reasonContent
@@ -202,7 +212,7 @@ export default {
     }
   },
   mounted() {
-    document.title = '拍卖专场'
+    document.title = '拍品专场'
     this.getZhuanchangInfo()
   }
 }
