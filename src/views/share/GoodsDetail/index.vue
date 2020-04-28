@@ -37,7 +37,10 @@
         </div>
       </div>
       <div class="goods-info">
-        <p class="goods-name">{{ goodsDetail.productName }}</p>
+        <p class="goods-name">
+          <span v-if="isWillSale" class="will-sale">预售爆款</span>
+          {{ goodsDetail.productName }}
+        </p>
         <p class="express" v-if="goodsDetail.postage">
           <span>快递:</span>
           <span>{{ goodsDetail.postage }}</span>
@@ -52,31 +55,73 @@
           <div class="tag-item">{{ goodsDetail.minorLabels }}</div>
         </div>
       </div>
+      <div class="booking_box" v-if="isWillSale">
+        <div class="yx_ls">
+          <div class="ls">
+            <div>已预订</div>
+            <div>{{goodsDetail.salesVolume}}人</div>
+          </div>
+          <div class="ls">
+            <div>剩余库存</div>
+            <div>{{goodsDetail.stock}}件</div>
+          </div>
+          <div class="ls">
+            <div>剩余时间</div>
+            <div class="tt">
+              <van-count-down :time="time" use-slot :auto-start="autoTimeStart" >
+                <template v-slot="timeData">
+                  <!-- <span class="item">{{ timeData.hours }}</span>
+                  <span class="item">{{ timeData.minutes }}</span>
+                  <span class="item">{{ timeData.seconds }}</span> -->
+                  <span v-if="timeData.days>0">
+                    <span class="item" >{{ timeData.days}}天</span>
+                  </span>
+                  <span v-if="timeData.days==0 && timeData.hours>0">
+                    <span class="item">{{ timeData.hours*60+timeData.minutes}}分</span>
+                  </span>
+
+                  <span v-if="timeData.hours ==0 && timeData.days==0">
+                    <span class="item">{{ timeData.minutes }}分</span>
+                    <span class="item">{{ timeData.seconds }}秒</span>
+                  </span>
+                  <span v-if="isEnd" class="item">已结束</span>
+                </template>
+
+              </van-count-down>
+            </div>
+          </div>
+        </div>
+        <div class="pre">
+          <van-progress custom-class="pro_s" track-color="#ffffff" color="#ee0a24" :percentage="percentage" stroke-width="8" :show-pivot="false" />
+          <!-- <van-progress custom-class="pro_s" track-color="#ffffff" color="#ee0a24" percentage="{{percentage}}" stroke-width="8" show-pivot="{{false}}" /> -->
+        </div>
+      </div>
       <div class="choose-property">
         <div class="property-title">
           <div class="property">
             <span>选择</span>
-            <span>{{ attributes }}</span>
+            <span v-if="productSpecId == ''">选择颜色、尺寸等</span>
+            <span v-else>{{ specsParams }}</span>
             <!-- <span>选择颜色、尺寸</span> -->
           </div>
           <img class="arrow-more" src="../../../assets/img/arrow-more.png" alt="">
         </div>
         <div>
           <ul class="property-list">
-            <li class="tips">共1种方案可选</li>
+            <li class="tips">共{{ goodsDetail.productSpec.length }}种方案可选</li>
           </ul>
         </div>
       </div>
-      <div class="store-wrapper flex-center">
+      <div class="store-wrapper flex-center" v-if="!isWillSale">
         <div class="store-info flex-center">
           <img class="store-img" :src="shopDetail.logoPicUrl" alt="">
           <div>
             <p class="store-top">
               <span class="store-name">{{ shopDetail.shopName }}</span>
-              <span class="shop-type">
+              <!-- <span class="shop-type">
                 <span class="type">{{ shopDetail.shopType === 0 ? '个人' : '企业' }}</span>
                 <span class="stars">V{{ shopDetail.stars }}</span>
-              </span>
+              </span> -->
             </p>
             <div class="stars-wrapper">
               <cui-rate :score="shopDetail.stars"></cui-rate>
@@ -95,7 +140,7 @@
         <div class="goods-title">商品详情</div>
         <div v-html="goodsDetail.detail"></div>
       </div>
-
+        
       <div class="guess-like">
         <div class="guess-title">猜你喜欢</div>
         <van-list
@@ -145,8 +190,10 @@
           </ul>
         </div>
         <div class="right flex-center">
-          <div class="add-cart">加入购物车</div>
-          <div class="buy-now">立即购买</div>
+          <div class="add-cart" v-if="!isWillSale">加入购物车</div>
+          <div class="buy-now" v-if="!isWillSale">立即购买</div>
+          <div class="qiangxian" v-if="!isEnd && isWillSale">抢先购</div>
+          <div class="isend" v-if="isEnd">已结束</div>
         </div>
       </div>
     </div>
@@ -163,6 +210,7 @@ export default {
   },
   data() {
     return {
+      isWillSale: false, // 是否预售
       shopDetail: {},
       goodsDetail: [],
       guessLikeList: [],
@@ -170,7 +218,13 @@ export default {
       finished: false,
       pageNumber: 1,
       showLoading: true,
-      attributes: ''
+      attributes: '',
+      time: 30 * 60 * 60 * 1000,
+      autoTimeStart: false,
+      percentage: '',
+      isEnd: false,
+      productSpecId: '',
+      specsParams: null
     }
   },
   methods: {
@@ -182,7 +236,7 @@ export default {
         plhparams: {
           productId: this.$route.query.productId
         }
-    });
+      });
     },
     getGoodsDetail() {
       let params = {
@@ -195,6 +249,16 @@ export default {
           console.log('goodsDetail:', res.data)
           this.goodsDetail = res.data
           this.shopDetail = res.data.shopDetail
+          this.isWillSale = res.data.saleType == 1 ? true : false
+          this.time = res.data.saleStartTimestamp-res.data.currentTimestamp
+          console.log('time:', this.time)
+          this.autoTimeStart = ((res.data.saleStartTimestamp-res.data.currentTimestamp)/1000)/3600>0?true:false
+          console.log('autoTimeStart:', this.autoTimeStart)
+          this.percentage = res.data.salesVolume / (res.data.salesVolume + res.data.stock) * 100
+          this.isEnd = res.data.saleEndTimestamp <= new Date().getTime()
+          console.log('isEnd:', this.isEnd)
+          this.productSpecId = res.data.productSpec && res.data.productSpec[0] && res.data.productSpec[0].id || ''
+          this.specsParams = res.data.productSpec && res.data.productSpec[0] && res.data.productSpec[0].specsParams || ''
           let attr = res.data.spec
           let arr = []
           attr && attr.forEach(item => {
@@ -249,7 +313,7 @@ export default {
   .godownload
     width 1.8rem
     height .72rem
-    background #7CD1CC
+    background #C0413B
     font-size .3rem
     color #fff
     line-height .72rem
@@ -355,6 +419,14 @@ export default {
       color #2D2D2D
       font-weight bold
       margin-bottom .32rem
+      .will-sale
+        background: #C0413B;
+        border-radius .08rem
+        padding: .02rem .16rem
+        height .38rem
+        line-height: .38rem
+        color #fff
+        font-size: .26rem
     .express
       font-size .24rem 
       color #9B9B9B
@@ -605,6 +677,21 @@ export default {
             line-height .33rem
             margin-top .05rem
     .right
+      .isend
+        width 4.96rem
+        height .98rem
+        color #FFFFFF
+        font-size .32rem
+        text-align center
+        line-height .98rem
+        background #CCCCCC
+      .qiangxian
+        width 4.96rem
+        height .98rem
+        color #FFFFFF
+        font-size .32rem
+        text-align center
+        line-height .98rem
       .add-cart, .buy-now
         width 2.28rem
         height .98rem
@@ -617,6 +704,8 @@ export default {
       .buy-now
         background #C0413B
         font-weight bold
+      .qiangxian
+        background #3BC0A2
 .goods-wrapper>>>.van-list__loading {
   width: 100%;
 }
@@ -635,5 +724,44 @@ export default {
   width: 2rem;
   padding: .2rem 0;
   border-radius: .1rem;
+}
+.booking_box {
+  background: #fff;
+  margin: .24rem 0;
+  padding: .32rem;
+}
+
+.booking_box .yx_ls {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.booking_box .yx_ls .ls {
+  flex: 1;
+  color: #333;
+  font-size: .22rem;
+}
+
+.booking_box .yx_ls .ls:first-child {
+  text-align: left;
+}
+
+.booking_box .yx_ls .ls:last-child {
+  text-align: right;
+}
+
+.booking_box .yx_ls .ls .item {
+  color: #333;
+  display: inline-block;
+  font-size: .22rem;
+}
+
+.booking_box  .pre {
+  margin-top: .20rem;
+}
+
+.booking_box .pro_s {
+  border: 1px solid #c0413b;
 }
 </style>

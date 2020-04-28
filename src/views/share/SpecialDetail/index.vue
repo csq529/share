@@ -145,11 +145,11 @@ export default {
   methods: {
     downLoad() {
       new JMLink({
-        jmlink:'https://agr903.jmlk.co/AA5nxian',// 短链地址
+        jmlink:'https://agr903.jmlk.co/AA5n',// 短链地址
         button:document.querySelector('a#btnOpenApp'),
         autoLaunchApp : true,
         plhparams: {
-          auctionId: this.$route.query.id || 15751,
+          auctionId: this.$route.query.zhuanchangid || 15751,
         }
     });
     },
@@ -160,7 +160,7 @@ export default {
     },
     getZhuanchangInfo() {
       let params = {
-        id: this.$route.query.id || 1057
+        id: this.$route.query.zhuanchangid || 1057
       }
       http.fetchGet(this.URL.getZhuanChangDetail, params).then(res => {
         this.showLoading = false
@@ -176,7 +176,7 @@ export default {
 
     getGoods() {
       let params = {
-        zhuanChangId: this.$route.query.id || 1057,
+        zhuanChangId: this.$route.query.zhuanchangid || 1057,
         limit: this.limit,
         offset: this.offset
       }
@@ -234,7 +234,7 @@ export default {
   .godownload
     width 1.8rem
     height .72rem
-    background #7CD1CC
+    background #C0413B
     font-size .3rem
     color #fff
     line-height .72rem
@@ -293,7 +293,7 @@ export default {
       // background:rgba(0,0,0,0.4);
     .special-name
       position absolute
-      top .58rem
+      top 2rem
       left .6rem
       .name
         width .7rem
@@ -465,6 +465,7 @@ export default {
           font-size .28rem
           color #C0413B
           padding-right .3rem
+          word-break keep-all
         .hot
           font-size .28rem
           color #555555

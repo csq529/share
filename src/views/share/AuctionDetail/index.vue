@@ -252,8 +252,8 @@ export default {
         button:document.querySelector('a#btnOpenApp'),
         autoLaunchApp : true,
         plhparams: {
-          auctionId: this.$route.query.id || 15751,
-          lotId: this.$route.query.zhuanchangid || 899
+          auctionId: this.$route.query.zhuanchangid || 899,
+          lotId:  this.$route.query.id || 15751,
         }
     });
     },
@@ -343,7 +343,7 @@ export default {
   .godownload
     width 1.8rem
     height .72rem
-    background #7CD1CC
+    background #C0413B
     font-size .3rem
     color #fff
     line-height .72rem
@@ -359,6 +359,8 @@ export default {
   background #E26619 !important
 .auctioning
   background #C0413B !important
+// .will-end
+//   background #CEA647 !important
 .givemoney {
   width: 3rem;
   height: .98rem;

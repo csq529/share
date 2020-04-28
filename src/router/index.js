@@ -18,6 +18,11 @@ const routes = [
     path: '/auction-detail',
     component: () => import('@/views/share/AuctionDetail'),
     name: 'AuctionDetail'
+  },
+  {
+    path: '/auction-scene',
+    component: () => import('@/views/share/AuctionsScene'),
+    name: 'AuctionsScene'
   }
 ]
 

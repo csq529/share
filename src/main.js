@@ -5,11 +5,11 @@ import './assets/css/reset.styl'
 import './common/common.css'
 import router from './router'
 import { url } from "./api/url"
-import VConsole from 'vconsole'
+// import VConsole from 'vconsole'
 Vue.prototype.URL = url
 import Vant from 'vant'
 import { Lazyload } from 'vant'
-new VConsole()
+// new VConsole()
 
 Vue.use(Lazyload)
 // import 'vant/lib/index.css';

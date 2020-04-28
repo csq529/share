@@ -46,7 +46,8 @@ module.exports = {
   devServer: {
     open: false,
     https: false,
-    hotOnly: false
+    hotOnly: false,
+    port: 8088
     // proxy: {
     //   '/api': {
     //     target: 'https://api.jindanke.cn' || 'http://127.0.0.1:8080',
