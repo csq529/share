@@ -7,7 +7,7 @@ const url = {
   getGoods: `${baseUrl}/place/goods`,
   getGoodsDetail: `https://api.sczxpm.com/api/product/findProduct`,
   guessLike: 'https://api.sczxpm.com/api/index/queryAnalogous',
-  getPaipinhui: 'http://39.97.231.232:8805/auction/getAuction'
+  getPaipinhui: 'https://api.sczxpm.com/api/auction/getAuction'
 }
 
 export { url }

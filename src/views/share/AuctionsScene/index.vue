@@ -61,11 +61,11 @@ export default {
   methods: {
     downLoad() {
       new JMLink({
-        jmlink:'https://agr903.jmlk.co/AAX8',// 短链地址
+        jmlink:'https://agr903.jmlk.co/AAU5',// 短链地址
         button:document.querySelector('a#btnOpenApp'),
         autoLaunchApp : true,
         plhparams: {
-          productId: this.$route.query.productId
+          auctionid: this.paipinInfo.id
         }
       })
     },
