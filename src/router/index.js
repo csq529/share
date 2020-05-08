@@ -23,6 +23,16 @@ const routes = [
     path: '/auction-scene',
     component: () => import('@/views/share/AuctionsScene'),
     name: 'AuctionsScene'
+  },
+  {
+    path: '/invitation-gifts',
+    component: () => import('@/views/share/InvitationGifts'),
+    name: 'InvitationGifts'
+  },
+  {
+    path: '/special-topic',
+    component: () => import('@/views/share/SpecialTopic'),
+    name: 'SpecialTopic'
   }
 ]
 

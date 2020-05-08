@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import './assets/js/rem.js'
 import './assets/css/reset.styl'
-import './common/common.css'
 import router from './router'
 import { url } from "./api/url"
 // import VConsole from 'vconsole'
@@ -10,6 +9,12 @@ Vue.prototype.URL = url
 import Vant from 'vant'
 import { Lazyload } from 'vant'
 // new VConsole()
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
+// import style
+// import 'swiper/css/swiper.css'
+
+Vue.use(VueAwesomeSwiper, /* { default options with global component } */)
 
 Vue.use(Lazyload)
 // import 'vant/lib/index.css';
