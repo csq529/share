@@ -19,7 +19,7 @@
             </li>
           </ul>
         </div>
-        <div class="rules">活动规则</div>
+        <div class="rules" @click="goRule">活动规则</div>
       </div>
       <img class="invite-now" src="../../../assets/img/invite-now.png" alt="">
       <div class="howjoin-des">
@@ -121,6 +121,10 @@ export default {
     }
   },
   methods: {
+    // 查看规则
+    goRule() {
+      this.$router.push('/invaition-rule')
+    },
     initSwiper() {
       const barrageWrapper = new Swiper("#barrage", {
         direction: "vertical",
