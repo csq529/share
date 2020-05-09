@@ -21,14 +21,14 @@
         </div>
         <div class="rules" @click="goRule">活动规则</div>
       </div>
-      <img class="invite-now" src="../../../assets/img/invite-now.png" alt="">
+      <img @click="showShare = true" class="invite-now" src="../../../assets/img/invite-now.png" alt="">
       <div class="howjoin-des">
         <img class="howjoin-title" src="../../../assets/img/how-join.png" alt="">
         <img class="activity-des" src="../../../assets/img/activity-des.png" alt="">
       </div>
     </div>
     <div class="ranking-invaterecord">
-      <van-tabs v-model="active">
+      <van-tabs v-model="active" swipeable>
         <van-tab title="邀请排行榜">
           <ul class="ranking-list">
             <li class="ranking-item" v-for="(item, index) in rankingList" :key="index">
@@ -48,13 +48,70 @@
           <p class="tips">仅展示前10名～</p>
         </van-tab>
         <van-tab title="我的邀请记录">
-          <div class="no-record">
+          <!-- <div class="no-record">
             <img class="empty-img" src="../../../assets/img/no-record.png" alt="">
             <p class="empty-text">暂时还没有邀请记录</p>
+          </div> -->
+          <div class="invation-record">
+            <div class="invation-reward">
+              <div class="reward-left">
+                <p class="left-text">共获得奖励</p>
+                <p>
+                  <span class="unit">¥</span>
+                  <span class="money">100</span>
+                </p>
+              </div>
+              <div class="reward-right">
+                <div>
+                  <p>共成功邀请3人</p>
+                  <p>下单签收成功1人</p>
+                </div>
+                <img class="check" src="../../../assets/img/check.png" alt="">
+              </div>
+            </div>
+            <ul class="record-list">
+              <li class="record-item">
+                <div class="record-item_left">
+                  <img class="avator" src="" alt="">
+                  <div clas="userinfo">
+                    <p class="name">张***端</p>
+                    <p class="date">5月10日受邀注册</p>
+                  </div>
+                </div>
+                <div class="record-item_right">
+                  <p>注册成功，暂时未下单</p>
+                </div>
+              </li>
+              <li class="record-item">
+                <div class="record-item_left">
+                  <img class="avator" src="" alt="">
+                  <div clas="userinfo">
+                    <p class="name">张***端</p>
+                    <p class="date">5月10日受邀注册</p>
+                  </div>
+                </div>
+                <div class="record-item_right">
+                  <p>注册成功，暂时未下单</p>
+                </div>
+              </li>
+            </ul>
           </div>
         </van-tab>
       </van-tabs>
     </div>
+    <van-action-sheet v-model="showShare">
+      <div class="content">
+        <div class="share-item">
+          <img src="../../../assets/img/wechat.png" alt="">
+          <span>微信好友</span>
+        </div>
+        <div class="share-item">
+          <img src="../../../assets/img/wechat-moments.png" alt="">
+          <span>微信朋友圈</span>
+        </div>
+      </div>
+      <div @click="showShare = false" class="cancel">取消</div>
+    </van-action-sheet>
   </div>
 </template>
 
@@ -64,6 +121,7 @@ import Swiper from "swiper"
 export default {
   data () {
     return {
+      showShare: false,
       active: 0,
       barrageList: [
         {
@@ -277,7 +335,7 @@ export default {
       height 3.4rem
       margin-top .3rem
 .ranking-invaterecord
-  padding .2rem .4rem 0
+  padding-top .2rem
   >>>.van-tab__text
     font-weight bolder
     color #333333
@@ -289,6 +347,7 @@ export default {
     background #F9F9F9
   .ranking-list
     margin-top .42rem
+    padding 0 .4rem
     .ranking-item
       height .64rem
       line-height .64rem
@@ -348,4 +407,114 @@ export default {
       height .4rem
       line-height .4rem
       padding-top .28rem
+  .invation-record
+    padding .28rem 0.24rem .5rem
+    .invation-reward
+      background url('../../../assets/img/invation-record.png') no-repeat center
+      width 7.02rem
+      height 1.96rem
+      background-size 7.02rem 1.96rem
+      position relative
+      .reward-left
+        position absolute
+        top .48rem
+        left .46rem
+        .left-text
+          font-size .18rem
+          color #333333
+          height .26rem
+          line-height .26rem
+        .unit
+          color #FF0000
+          font-size .28rem
+          font-weight bolder
+        .money
+          font-size .6rem
+          color #FF0000
+          font-weight bold
+      .reward-right
+        position absolute
+        top .48rem
+        right .48rem
+        display flex
+        align-items center
+        justify-content space-between
+        width 4.2rem
+        p
+          font-size .28rem
+          color #333333
+          height .4rem
+          line-height .4rem
+        p:first-child
+          margin-bottom .12rem
+        .check
+          width 1.2rem
+          height .6rem
+      .reward-right:before
+        content ''
+        position absolute
+        width 1px
+        height 1.62rem
+        background #EEEEEE
+        top -.35rem
+        left -.28rem
+    .record-list
+      margin-top .28rem
+      padding 0 .2rem
+      .record-item
+        display flex
+        align-items center
+        justify-content space-between
+        &:not(:last-child)
+          margin-bottom .3rem
+        .record-item_left
+          display flex
+          align-items center
+          .avator
+            margin-right .3rem
+            width .96rem
+            height .96rem
+            border-radius 50%
+            display block
+            background skyblue
+          .name
+            height .42rem
+            line-height .42rem
+            color #333333
+            font-size .3rem
+          .date
+            font-size .28rem
+            color #999999
+            height .36rem
+            line-height .36rem
+            margin-top .04rem
+.content
+  display flex
+  align-items center
+  justify-content center
+  padding-top .3rem
+  padding-bottom .24rem
+  .share-item
+    display flex
+    flex-direction column
+    align-items center
+    &:first-child
+      margin-right 1.54rem
+    img
+      width .8rem
+      height .8rem
+    span
+      color #777777
+      font-size .24rem
+      margin-top .08rem
+      height .3rem
+      line-height .3rem
+.cancel
+  width 100%
+  height 1.04rem
+  line-height 1.04rem
+  text-align center
+  font-size .32rem
+  color #666666
+  border-top .2rem solid #F9F9F9
 </style>

@@ -43,7 +43,7 @@
             <img @click="showHaipai" class="haipai-pic" src="../../../assets/img/haipai-pic.png" alt="">
           </div>
           <div class="haipai-content">
-            <van-tabs type="card">
+            <van-tabs type="card" swipeable animated>
               <van-tab v-for="item in haipaiList" :key="item.id" :title="item.currentdate">
                 <img class="haipai-img" :src="item.imageurl" alt="">
               </van-tab>
@@ -117,7 +117,7 @@
           <img @click="showAction = false" class="close" src="../../../assets/img/close.png" alt="">
         </div>
         <div class="sheet-content">
-            <van-tabs type="card">
+            <van-tabs type="card" swipeable animated>
               <van-tab v-for="(item, index) in haipaituluList" :key="index" :title="item.catalogueDate">
                 <ul class="sheet-list">
                   <li class="sheet-item" v-for="(sheet, i) in item.auctionHouseList" :key="i">
@@ -126,7 +126,7 @@
                         <div class="time">{{ sheet.date }}</div>
                         <div class="status" :class="(sheet.zhuangtai == 1 || sheet.zhuangtai == 2) ? 'rightStart' : sheet.zhuangtai == 3 ? 'previewing' : sheet.zhuangtai == 4 ? 'end' : ''">{{ sheet.zhuangtaititle }}</div>
                       </div>
-                      <i class="dot"></i>
+                      <span class="dot"></span>
                     </div>
                     <div class="sheet-item_right">
                       <img class="auction-pic" :src="sheet.shouyetu" alt="">
@@ -189,7 +189,7 @@ export default {
       let params = {
         type: 'product',
         pageNumber: this.pageNumber,
-        pageSize: 20
+        pageSize: 10
       }
       if (!this.finished) {
         this.pageNumber += 1
@@ -362,7 +362,8 @@ export default {
   text-overflow inherit
 .special-topic
   position relative
-  overflow-x hidden
+  // overflow-x hidden
+  // height 100%
   .header-pic
     width 100%
     height 13.34rem
@@ -464,9 +465,9 @@ export default {
   .coupons
     display flex
     align-items center
-    justify-content space-around
+    justify-content center
     margin-top .22rem
-    padding 0 .6rem
+    // padding 0 .6rem
     box-sizing border-box
     .coupon-on
       background url('../../../assets/img/coupon.png') no-repeat center
@@ -736,6 +737,8 @@ export default {
 >>> .van-popup
   min-height 9.766rem
   background #FFFDF0
+  border .03rem solid #B6110D
+  box-sizing border-box
 .sheet-content
   >>> .van-tabs__nav
     padding 0 .6rem
@@ -755,28 +758,41 @@ export default {
         display flex
         align-items center
         justify-content space-between
+        position relative
         .time
           font-size .32rem
           color #333233
           font-weight bolder
+          margin-right .21rem
         .status
           font-size .2rem
           text-align center
           margin-top .1rem
         .dot
-          width .2rem
-          height .2rem
+          width .14rem
+          height .14rem
           background #B6110D
           border-radius 50%
           display inline-block
-          margin-left .21rem
-          margin-right .21rem
+          margin-top -.4rem
+      // .sheet-item_left::after
+      //   content ''
+      //   width .14rem 
+      //   height .14rem
+      //   background #B6110D
+      //   top 1rem
+      //   left 0
+      //   -moz-border-radius 50%
+      //   -o-border-radius 50%
+      //   -webkit-border-radius 50%
+      //   border-radius 50%
       .sheet-item_right
+        margin-left .21rem
         display flex
         align-items center
         .auction-pic
           width 1.2rem
-          height 1.2rem
+          height 1.28rem
           border-radius .1rem 0px 0px .1rem
           margin-right .04rem
         .auction-info
@@ -785,12 +801,12 @@ export default {
           border 1px solid rgba(182, 17, 13, 1)
           box-shadow:0px 0px .04rem 0px rgba(51,51,51,0.4);
           border-radius:0px .10rem .1rem 0px;
-          padding .12rem 0.29rem .10rem .22rem
+          padding 0 0.29rem .10rem .22rem
           .auction-name
+            margin-top .12rem
             font-size .24rem
             font-weight bolder
-            height .24rem
-            line-height .24rem
+            // line-height .24rem
             overflow: hidden;
             white-space: nowrap;
             width 3rem
@@ -831,7 +847,7 @@ export default {
         bottom: 0;
         left: 0;
         top: 0;
-        left: 1.18rem;
+        left: 1.09rem;
         bottom: -.6rem;
   /deep/.van-tabs__nav--card .van-tab
     font-size .2rem
