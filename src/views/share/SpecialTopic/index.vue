@@ -9,7 +9,7 @@
               v-for="(item, index) in barrageList"
               :key="index"
             >
-              <div class="slide-item">
+              <div class="slide-item" @click="barrageJump(item)">
                 <div class="slide-left">
                   <img class="avator" :src="item.headimageurl" alt="">
                   <span class="user-name">{{ item.name }}</span>
@@ -28,7 +28,7 @@
           </div>
           <img @click="goSee" class="advertising-space" src="../../../assets/img/advertising-space.png" alt="">
           <div class="annual-categories">
-            <div class="categrory-item" v-for="(item, index) in categorylist" :key="item.id" v-if="index < 8">
+            <div class="categrory-item" v-for="(item, index) in categorylist" :key="item.id" v-if="index < 8" @click="categoryJump(item)">
               <img class="categrory-pic" :src="item.imageurl" alt="">
               <span>{{ item.catetoryname }}</span>
             </div>
@@ -44,8 +44,8 @@
           </div>
           <div class="haipai-content">
             <van-tabs type="card" swipeable animated>
-              <van-tab v-for="item in haipaiList" :key="item.id" :title="item.currentdate">
-                <img class="haipai-img" :src="item.imageurl" alt="">
+              <van-tab v-for="item in haipaiList" :key="item.id" :title="item.currentdate" >
+                <img class="haipai-img" :src="item.imageurl" alt="" @click="happyJump(item)">
               </van-tab>
             </van-tabs>
           </div>
@@ -174,10 +174,26 @@ export default {
       loading: false,
       finished: false,
       pageNumber: 1,
-      showLoading: true
+      showLoading: true,
+      env: this.util.testMobileType()
     }
   },
   methods: {
+    // 点击弹幕跳转
+    barrageJump(item) {
+      console.log('env:', this.env)
+      console.log('item:', item)
+    },
+    // 点击分类跳转
+    categoryJump(item) {
+      console.log('env:', this.env)
+      console.log('item:', item)
+    },
+    // 点击嗨拍跳转
+    happyJump(item) {
+      console.log('env:', this.env)
+      console.log('item:', item)
+    },
     // 去看看
     goSee() {
       this.$router.push({
@@ -283,6 +299,7 @@ export default {
       http.fetchGet(this.URL.getTodayAuction, params).then(res => {
         if (res.code === 100) {
           this.todayAuction = res.data.auctionHouseList
+          console.log('todayAuction:', this.todayAuction)
           this.todayAuction && this.todayAuction.forEach(item => {
             item.countdownLabel = getStatusAndTime(new Date(item.kaishiriqi).getTime(), new Date(item.jieshuriqi).getTime()).countdownLabel
             item.countdownTime = getStatusAndTime(new Date(item.kaishiriqi).getTime(), new Date(item.jieshuriqi).getTime()).countdownTime
@@ -295,6 +312,7 @@ export default {
     }
   },
   mounted() {
+    console.log('env:', this.util.testMobileType())
     this.getCategory()
     this.getRotation()
     this.getModule()
@@ -306,6 +324,10 @@ export default {
           loop: true,
           slidesPerView: "auto",
           spaceBetween: 10,
+          effect: 'slide',
+          fadeEffect: {
+            crossFade: false,
+          },
           speed: 1000,
           allowTouchMove: false,
           autoplay: {
@@ -326,6 +348,24 @@ export default {
 </script>
 <style scoped src="../../../assets/css/swiper.css"></style>
 <style lang="stylus" scoped>
+@keyframes scaleDrew {
+/* 定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称 */
+    0% {
+      transform: scale(1);
+    }
+
+    25% {
+      transform: scale(1.05);
+    }
+
+    50% {
+      transform: scale(1);
+    }
+
+    75% {
+      transform: scale(1.05);
+    }
+  }
 .previewing {
   color #AF6F00
 }
@@ -482,6 +522,7 @@ export default {
     height 1.33rem
     display block
     margin 0 auto
+    animation: scaleDrew 1.5s ease-in-out infinite;
   .annual-categories
     display flex
     align-items center

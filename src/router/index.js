@@ -5,6 +5,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    redirect: '/special-topic'
+  },
+  {
     path: '/goods-detail',
     component: () => import('@/views/share/GoodsDetail'),
     name: 'GoodsDetail'
@@ -38,6 +42,11 @@ const routes = [
     path: '/invaition-rule',
     component: () => import('@/views/share/InvaitionRule'),
     name: 'InvaitionRule'
+  },
+  {
+    path: '/newGiftBag',
+    component: () => import('@/views/share/InvaitionPage'),
+    name: 'InvaitionPage'
   }
 ]
 

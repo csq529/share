@@ -21,7 +21,9 @@
         </div>
         <div class="rules" @click="goRule">活动规则</div>
       </div>
-      <img @click="showShare = true" class="invite-now" src="../../../assets/img/invite-now.png" alt="">
+      <div class="invite-now">
+        <img @click="showShare = true" class="invite-now-btn" src="../../../assets/img/invite-now.png" alt="">
+      </div>
       <div class="howjoin-des">
         <img class="howjoin-title" src="../../../assets/img/how-join.png" alt="">
         <img class="activity-des" src="../../../assets/img/activity-des.png" alt="">
@@ -213,6 +215,24 @@ export default {
 
 <style scoped src="../../../assets/css/swiper.css"></style>
 <style scoped lang="stylus">
+@keyframes scaleDrew {
+/* 定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称 */
+    0% {
+      transform: scale(1);
+    }
+
+    25% {
+      transform: scale(1.05);
+    }
+
+    50% {
+      transform: scale(1);
+    }
+
+    75% {
+      transform: scale(1.05);
+    }
+  }
 .invitation-gifts
   background #F9F9F9
   .top-bg
@@ -318,6 +338,11 @@ export default {
     left 50%
     transform translateX(-50%)
     top 7.06rem
+    .invite-now-btn
+      width 100%
+      height 100%
+      display block
+      animation: scaleDrew 1.5s ease-in-out infinite;
   .howjoin-des
     position absolute
     top 8.64rem
