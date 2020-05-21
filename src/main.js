@@ -5,8 +5,10 @@ import utils from './assets/js/utils.js'
 import './assets/css/reset.styl'
 import router from './router'
 import { url } from "./api/url"
+import http from '@/api/ajax'
 // import VConsole from 'vconsole'
 Vue.prototype.URL = url
+Vue.prototype.$http = http
 import Vant from 'vant'
 import { Lazyload } from 'vant'
 // new VConsole()

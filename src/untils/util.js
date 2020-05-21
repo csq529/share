@@ -18,12 +18,13 @@ const formatNumber = n => {
   return n[1] ? n : "0" + n;
 };
 const getStatusAndTime = (start, end) => {
-  const now = new Date().valueOf()
+  var now = new Date().valueOf()
+  now = now + 1000;
   let countdownTime
   if (now > end) {
     return {
       countdownLabel: '已结束',
-      countdownTime: moment(end, 'x').format('MM-DD HH:mm')
+      countdownTime: moment(end, 'x').format('YYYY/MM/DD HH:mm')
     }
   } else if (now >= start) {
     const duration = moment.duration(end - now, 'milliseconds')
@@ -135,7 +136,7 @@ const getEndTimeDiff = end => {
   } else if (now > end) {
     return {
       countdownLabel: "已结束",
-      countdownTime: moment(end, "x").format("MM-DD HH:mm")
+      countdownTime: moment(end, "x").format("MM/DD HH:mm")
     };
   }
 };

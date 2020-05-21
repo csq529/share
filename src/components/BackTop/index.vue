@@ -100,7 +100,7 @@ export default {
 .back-to-ceiling {
   position: fixed;
   display: inline-block;
-  bottom: .5rem;
+  bottom: .2rem;
   right: .25rem;
   text-align: center;
   z-index: 99;

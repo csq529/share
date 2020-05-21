@@ -23,12 +23,21 @@ export default {
         const u = navigator.userAgent
         const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
         const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
-        if (isAndroid) {
-          return 'android'
-        } else if (isiOS) {
-          return 'ios'
+        var ua = navigator.userAgent.toLowerCase();
+        if (!u.includes('MicroMessenger')) {//说明不在微信中
+          // 走不在小程序的逻辑
+          if (isAndroid) {
+            return 'android'
+          } else if (isiOS) {
+            return 'ios'
+          }
         } else {
-          return 'wx'
+            wx.miniProgram.getEnv(function(res) {
+                if (res.miniprogram) {
+                    // 走在小程序的逻辑
+                    return 'wx'
+                }
+            })
         }
       },
       // 校验手机号码

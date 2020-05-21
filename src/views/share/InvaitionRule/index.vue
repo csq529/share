@@ -8,8 +8,8 @@
             <span class="dot">1</span>
           </div>
           <div class="rule-item_right">
-            <span class="title">标题</span>
-            <p class="content">活动具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则活动具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则活动具体规则具体规则具体规则具体规则具体规则</p>
+            <span class="title">如何发起邀请？</span>
+            <p class="content">活动期间分享活动发起邀请，通过分享好友、分享朋友圈的形式邀请好友。</p>
           </div>
         </li>
         <li class="rule-item">
@@ -17,8 +17,8 @@
             <span class="dot">2</span>
           </div>
           <div class="rule-item_right">
-            <span class="title">标题</span>
-            <p class="content">活动具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则活动具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则活动具体规则具体规则具体规则具体规则具体规则</p>
+            <span class="title">什么情况算邀请成功？</span>
+            <p class="content">被邀请的对象必须为平台新用户，则好友需要通过您的分享链接（或图片二维码）接受邀请注册，并在30天内成功下单，签收7天后无退款视为本次邀请成功。</p>
           </div>
         </li>
         <li class="rule-item">
@@ -26,8 +26,8 @@
             <span class="dot">3</span>
           </div>
           <div class="rule-item_right">
-            <span class="title">标题</span>
-            <p class="content">活动具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则活动具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则活动具体规则具体规则具体规则具体规则具体规则</p>
+            <span class="title">邀请成功会获得什么？</span>
+            <p class="content">您的好友是平台新用户，则您的好友可获得200元新人券包，具体使用规则见具体优惠券使用范围。您可将获得100元的奖励可提现。</p>
           </div>
         </li>
         <li class="rule-item">
@@ -35,8 +35,10 @@
             <span class="dot">4</span>
           </div>
           <div class="rule-item_right">
-            <span class="title">标题</span>
-            <p class="content">活动具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则活动具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则具体规则活动具体规则具体规则具体规则具体规则具体规则</p>
+            <span class="title">需要注意什么？</span>
+            <p class="content">同一登录帐号、同一手机号、同一终端设备号、同一支付账户、同一IP或其它合理显示为同一用户的情形，均视为同一用户，不可互相邀请。</p>
+            <p class="content">若通过不正当手段获取奖励，平台有权撤销该用户的活动资格并取消其奖励，情节严重者将追究其法律责任。</p>
+            <p class="content">本活动最终解释权归Icollect收藏在线所有</p>
           </div>
         </li>
       </ul>
@@ -110,6 +112,7 @@ export default {
             font-size .28rem
             color #000000
             line-height .4rem
+            font-weight bold
           .content
             font-size .24rem
             color #000000

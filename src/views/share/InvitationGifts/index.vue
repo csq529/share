@@ -6,15 +6,15 @@
           <ul class="swiper-wrapper">
             <li
               class="swiper-slide"
-              v-for="(item, index) in barrageList"
-              :key="index"
+              v-for="item in barrageList"
+              :key="item.userId"
             >
               <div class="slide-item">
                 <div class="slide-left">
-                  <img class="avator" src="" alt="">
-                  <span>{{ item.name }}</span>
+                  <img class="avator" :src="item.userIcon" alt="">
+                  <span>{{ item.messageContent }}</span>
                 </div>
-                <img class="go-icon" src="../../../assets/img/go-see.png" alt="">
+                <!-- <img class="go-icon" src="../../../assets/img/go-see.png" alt=""> -->
               </div>
             </li>
           </ul>
@@ -22,7 +22,7 @@
         <div class="rules" @click="goRule">活动规则</div>
       </div>
       <div class="invite-now">
-        <img @click="showShare = true" class="invite-now-btn" src="../../../assets/img/invite-now.png" alt="">
+        <img @click="inviteNow" class="invite-now-btn" src="../../../assets/img/invite-now.png" alt="">
       </div>
       <div class="howjoin-des">
         <img class="howjoin-title" src="../../../assets/img/how-join.png" alt="">
@@ -33,81 +33,70 @@
       <van-tabs v-model="active" swipeable>
         <van-tab title="邀请排行榜">
           <ul class="ranking-list">
-            <li class="ranking-item" v-for="(item, index) in rankingList" :key="index">
+            <li class="ranking-item" v-for="(item, index) in rankingList" :key="item.userid">
               <div class="ranking-item_left">
                 <img v-if="index === 0" class="top3" src="../../../assets/img/top1.png" alt="">
                 <img v-else-if="index === 1" class="top3" src="../../../assets/img/top2.png" alt="">
                 <img v-else-if="index === 2" class="top3" src="../../../assets/img/top3.png" alt="">
                 <span v-else class="ranking-order">{{ index + 1 }}</span>
-                <img class="avator" src="../../../assets/img/avator.png" alt="">
-                <span class="ranking-name">{{ item.name }}</span>
+                <img class="avator" :src="item.userIcon" alt="">
+                <span class="ranking-name">{{ item.username }}</span>
               </div>
               <div class="ranking-item_right">
-                邀请<span class="num">{{ item.num }}</span>人
+                邀请<span class="num">{{ item.invitePeopel }}</span>人
               </div>
             </li>
           </ul>
           <p class="tips">仅展示前10名～</p>
         </van-tab>
         <van-tab title="我的邀请记录">
-          <!-- <div class="no-record">
-            <img class="empty-img" src="../../../assets/img/no-record.png" alt="">
-            <p class="empty-text">暂时还没有邀请记录</p>
-          </div> -->
-          <div class="invation-record">
+          <div class="invation-record" v-if="ticketInvite && ticketInvite.successInvite != 0">
             <div class="invation-reward">
               <div class="reward-left">
                 <p class="left-text">共获得奖励</p>
                 <p>
                   <span class="unit">¥</span>
-                  <span class="money">100</span>
+                  <span class="money">{{ ticketInvite.totalAmount || 0}}</span>
                 </p>
               </div>
               <div class="reward-right">
                 <div>
-                  <p>共成功邀请3人</p>
-                  <p>下单签收成功1人</p>
+                  <p>共成功邀请{{ ticketInvite.successInvite }}人</p>
+                  <p>下单签收成功{{ ticketInvite.finshInvite }}人</p>
                 </div>
-                <img class="check" src="../../../assets/img/check.png" alt="">
+                <img @click="goWallet" class="check" src="../../../assets/img/check.png" alt="">
               </div>
             </div>
             <ul class="record-list">
-              <li class="record-item">
+              <li class="record-item" v-for="item in ticketInviteFriendList" :key="item.userid">
                 <div class="record-item_left">
-                  <img class="avator" src="" alt="">
+                  <img class="avator" :src="item.userIcon" alt="">
                   <div clas="userinfo">
-                    <p class="name">张***端</p>
-                    <p class="date">5月10日受邀注册</p>
+                    <p class="name">{{ item.username }}</p>
+                    <p class="date">{{ item.createtimeStr }}受邀注册</p>
                   </div>
                 </div>
                 <div class="record-item_right">
-                  <p>注册成功，暂时未下单</p>
-                </div>
-              </li>
-              <li class="record-item">
-                <div class="record-item_left">
-                  <img class="avator" src="" alt="">
-                  <div clas="userinfo">
-                    <p class="name">张***端</p>
-                    <p class="date">5月10日受邀注册</p>
-                  </div>
-                </div>
-                <div class="record-item_right">
-                  <p>注册成功，暂时未下单</p>
+                  <p>{{ item.statetitle }}</p>
+                  <p class="amount" v-if="item.state === 4">奖励{{ item.amount }}元</p>
                 </div>
               </li>
             </ul>
+          </div>
+          <div class="no-record" v-else>
+            <img class="empty-img" src="../../../assets/img/no-record.png" alt="">
+            <p class="empty-text">暂时还没有邀请记录</p>
           </div>
         </van-tab>
       </van-tabs>
     </div>
     <van-action-sheet v-model="showShare">
       <div class="content">
-        <div class="share-item">
+        <div class="share-item" @click="shareWX">
           <img src="../../../assets/img/wechat.png" alt="">
           <span>微信好友</span>
         </div>
-        <div class="share-item">
+        <div class="share-item" @click="shareFriends">
           <img src="../../../assets/img/wechat-moments.png" alt="">
           <span>微信朋友圈</span>
         </div>
@@ -125,65 +114,77 @@ export default {
     return {
       showShare: false,
       active: 0,
-      barrageList: [
-        {
-          name: '张三'
-        },
-        {
-          name: '李四'
-        },
-        {
-          name: '王'
-        }
-      ],
-      rankingList: [
-        {
-          name: 'cui1',
-          num: 200
-        },
-        {
-          name: 'cui2',
-          num: 200
-        },
-        {
-          name: 'cui3',
-          num: 200
-        },
-        {
-          name: 'cui4',
-          num: 200
-        },
-        {
-          name: 'cui5',
-          num: 200
-        },
-        {
-          name: 'cui6',
-          num: 200
-        },
-        {
-          name: 'cui7',
-          num: 200
-        },
-        {
-          name: 'cui8',
-          num: 200
-        },
-        {
-          name: 'cui9',
-          num: 200
-        },
-        {
-          name: 'cui10',
-          num: 200
-        }
-      ]
+      barrageList: [], // 头部弹幕
+      rankingList: [], // 邀请排行榜
+      ticketInviteFriendList: [], // 我的邀请记录
+      ticketInvite: {}, // 邀请统计信息
+      env: 'ios',
+      inviteNowInfo: {}
     }
   },
   methods: {
+    // 跳转到钱包
+    goWallet() {
+      if(this.env === 'ios') {
+        window.location.href = `goToWallet`
+      } else {
+        MyJSInterface.goToQianbao()
+      }
+    },
+    // 立即邀请
+    inviteNow() {
+      this.showShare = true
+      let params = {
+        md5Str: this.$route.query.md5Str
+      }
+      this.$http.fetchGet(this.URL.inviteNow, params).then(res => {
+        console.log('inviteNow:', res.data)
+        this.inviteNowInfo = res.data
+      })
+    },
+    // 微信
+    shareWX() {
+      if(this.env === 'ios') {
+        window.location.href = `shareWX?appletUrl=/pages/invite/index?invitationCode=${this.inviteNowInfo.userid}&desc=''&imageurl=${this.inviteNowInfo.shareImage}&title=在吗？推荐你看看收藏在线，各种拍品宝贝，让你应接不暇~&weixintUrl=''`
+      } else {
+        MyJSInterface.shareWx(1,"在吗？推荐你看看收藏在线，各种拍品宝贝，让你应接不暇~", `/pages/invite/index?invitationCode=${this.inviteNowInfo.userid}`, '分享的文字性内容', `${this.inviteNowInfo.shareImage}`)
+      }
+      this.showShare = false
+    },
+    // 朋友圈
+    shareFriends() {
+      let params = {
+        md5Str: this.$route.query.md5Str
+      }
+      this.$http.fetchGet(this.URL.shareBillImage, params).then(res => {
+        console.log('res:', res.message)
+      // window.location.href = `shareFriends?url=${res.message}`
+      if(this.env === 'ios') {
+        window.location.href = `shareFriends?imageurl=${res.message}`
+      } else {
+        MyJSInterface.shareWx(2,"520美好生活拍卖节", '', '', res.message)
+      }
+      })
+      this.showShare = false
+    },
     // 查看规则
     goRule() {
       this.$router.push('/invaition-rule')
+    },
+    ticketActivityIndex() {
+      let params = {
+        md5Str: this.$route.query.md5Str
+      }
+      return this.$http.fetchGet(this.URL.ticketActivityIndex, params).then(res => {
+        if (res.code === 100) {
+          console.log('res:', res)
+          this.barrageList = res.data.ticketMessagesList
+          this.rankingList = res.data.ticketInviteRankList
+          this.ticketInviteFriendList = res.data.ticketInviteFriendList
+          this.ticketInvite = res.data.ticketInvite
+          console.log('ticketInvite:', this.ticketInvite)
+        }
+      })
     },
     initSwiper() {
       const barrageWrapper = new Swiper("#barrage", {
@@ -191,12 +192,12 @@ export default {
         loop: true,
         slidesPerView: "auto",
         spaceBetween: 10,
-        speed: 1000,
+        speed: 2000,
         allowTouchMove: false,
         autoplay: {
           disableOnInteraction: false,
           stopOnLastSlide: true,
-          delay: 1000
+          delay: 2000
         },
         lazy: {
           loadPrevNext: true,
@@ -205,10 +206,33 @@ export default {
         touchMoveStopPropagation: false
         // initialSlide: 1
       })
+    },
+    testMobileType () {
+        const u = navigator.userAgent
+        const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
+        const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=="micromessenger") {
+            wx.miniProgram.getEnv((res)=>{
+              if (res.miniprogram) {        //在小程序
+                this.env = 'wx'                   
+              } else {                   //在公众号
+              }
+            })
+        }else{     //都不在
+          if (isAndroid) {
+            this.env = 'android'
+          } else if (isiOS) {
+            this.env = 'ios'
+          }
+        }
     }
   },
   mounted() {
-    this.initSwiper()
+    this.testMobileType()
+    this.ticketActivityIndex().then(() => {
+      this.initSwiper()
+    })
   }
 }
 </script>
@@ -238,12 +262,12 @@ export default {
   .top-bg
     position relative
     width 100%
-    height 13.68rem
+    height 14.1rem
     background url('../../../assets/img/Invitation-bg.png') no-repeat center
-    background-size 100% 13.68rem
+    background-size 100% 14.1rem
     .subtitles {
       height: 1.2rem;
-      width: 4.2rem;
+      width: 4.4rem;
       position: absolute;
       top -.4rem
       left: 0rem;
@@ -357,7 +381,7 @@ export default {
       height .44rem
     .activity-des
       width 6.7rem
-      height 3.4rem
+      height 3.92rem
       margin-top .3rem
 .ranking-invaterecord
   padding-top .2rem
@@ -501,7 +525,6 @@ export default {
             height .96rem
             border-radius 50%
             display block
-            background skyblue
           .name
             height .42rem
             line-height .42rem
@@ -513,6 +536,13 @@ export default {
             height .36rem
             line-height .36rem
             margin-top .04rem
+        .amount
+          font-size .24rem
+          color #FF0000
+          font-weight bold
+          text-align center
+          line-height .34rem
+          margin-top .04rem
 .content
   display flex
   align-items center
